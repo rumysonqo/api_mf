@@ -1,0 +1,53 @@
+update sig_ppr_establecimiento
+set cad_operativa='110000'
+where cod_establec=0
+and sec_ejec=1348
+
+select * from SIG_PPR_METFIS_X_SUBFIN
+where ANO_EJE=2023
+and NRO_FASE=5
+
+select * from UNIDAD_MEDIDA
+
+
+
+select prg.ESTRATEGIA_NACIONAL as cod_programa, prg.NOMBRE as nom_programa, concat(prg.ESTRATEGIA_NACIONAL,' ',prg.NOMBRE) as programa,
+prd.ACT_PROY as cod_producto, prd.nombre as nom_producto, concat(prd.ACT_PROY,' ',prd.nombre) as producto,
+act.COMPONENTE as cod_actividad, act.nombre as nom_actividad, concat(act.COMPONENTE, ' ',act.nombre) as actividad,
+sf.SUB_FINALIDAD as cod_sub_finalidad, sf.NOMBRE as nom_sub_finalidad, concat(sf.SUB_FINALIDAD,' ',sf.NOMBRE) as sub_finalidad,sf.TRAZADOR, 
+mr.COD_MICRORED as cod_micro_red, iif(est.COD_ESTABLEC=0,'SEDE RED NORTE',mr.DESC_MICRORED) as nom_micro_red,
+concat(mr.COD_MICRORED,' ',iif(est.COD_ESTABLEC=0,'SEDE RED NORTE',mr.DESC_MICRORED)) as micro_red, est.COD_ESTABLEC as cod_eess, iif(est.COD_ESTABLEC=0,'SEDE RED NORTE',est.DESC_ESTABLEC) as nom_eess, 
+concat(est.COD_ESTABLEC,' ',iif(est.COD_ESTABLEC=0,'SEDE RED NORTE',est.DESC_ESTABLEC)) as establecimiento,
+est.CATEGORIA,
+mf.CANTIDAD as meta_fisica,
+mf.UNIDAD_MEDIDA as cod_unidad_medida, um.NOMBRE as nom_unidad_medida
+from SIG_SUB_FINALIDAD sf,
+SIG_PPR_METFIS_X_SUBFIN mf,
+ACT_PROY_NOMBRE prd,
+SIG_PPR_SEDE sd,
+SIG_PPR_ESTABLECIMIENTO est,
+ESTRATEGIA_NACIONAL_NOMBRE prg,
+COMPONENTE_NOMBRE act,
+SIG_PPR_MICRORED mr,
+UNIDAD_MEDIDA um
+where mf.ANO_EJE=sf.ANO_EJE
+and mf.ANO_EJE=prd.ANO_EJE
+and mf.ANO_EJE=sd.ANO_EJE
+and mf.ANO_EJE=est.ANO_EJE
+and mf.ANO_EJE=prg.ANO_EJE
+and mf.ANO_EJE=act.ANO_EJE
+and mf.SUB_FINALIDAD=sf.SUB_FINALIDAD
+and sf.ACT_PROY=prd.ACT_PROY
+and sf.COMPONENTE=act.COMPONENTE
+and sf.ANO_EJE=prd.ANO_EJE
+and mf.SEC_ESTABLEC=sd.SEC_ESTABLEC
+and sd.COD_ESTABLEC=est.COD_ESTABLEC
+and sf.PROGRAMA_INSTITUCIONAL=prg.ESTRATEGIA_NACIONAL
+and est.CAD_OPERATIVA=concat(mr.COD_DISA,mr.COD_RED,mr.COD_MICRORED)
+and mf.UNIDAD_MEDIDA=um.UNIDAD_MEDIDA
+and mf.CANTIDAD>0
+and mf.NRO_FASE=5
+and mf.SEC_EJEC=1348
+and mf.ANO_EJE=2023
+
+
